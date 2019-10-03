@@ -4,7 +4,7 @@ export const apiClient = axios.create({
   /**
    * Import the config from the App/Config/index.js file
    */
-  baseURL: "http://localhost:8080/api/v1/",
+  baseURL: "http://localhost:5000/api/v1/",
   method: "get",
   headers: {
     Accept: "application/json",

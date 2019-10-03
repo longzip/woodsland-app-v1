@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "woodsland",
+    "password": "wl1408@It",
+    "database": "003",
+    "host": "203.162.123.56",
+    "dialect": "mssql",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "woodsland",
+    "password": "wl1408@It",
+    "database": "003",
+    "host": "203.162.123.56",
+    "dialect": "mssql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "woodsland",
+    "password": "wl1408@It",
+    "database": "003",
+    "host": "203.162.123.56",
+    "dialect": "mssql",
+    "operatorsAliases": false
+  }
+}
