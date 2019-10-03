@@ -1,7 +1,7 @@
 //server.js
 const express = require("express");
 const favicon = require("express-favicon");
-const logger = require("morgan");
+// const logger = require("morgan");
 const path = require("path");
 const cors = require("cors");
 const port = process.env.PORT || 5000;
@@ -16,12 +16,12 @@ app.use(
   })
 );
 app.use(cors());
-const environment = process.env.NODE_ENV; // development
-if (environment !== "production") {
-  app.use(logger("dev"));
-  // and this
-  app.use("/", logger("dev"));
-}
+// const environment = process.env.NODE_ENV; // development
+// if (environment !== "production") {
+//   app.use(logger("dev"));
+//   // and this
+//   app.use("/", logger("dev"));
+// }
 const routes = require("./routes/index.js");
 app.use("/api/v1", routes(router));
 app.use(favicon(__dirname + "/build/favicon.ico"));
