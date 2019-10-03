@@ -21,7 +21,7 @@ const makeGetVisibleTodos = () => {
   );
 };
 
-const getWorkcenterFilter = (state, props) => props.match.params.id;
+const getWorkcenterFilter = (state, props) => parseInt(props.match.params.id);
 
 const getWorkorders = state => state.workordersReducer.workorders;
 

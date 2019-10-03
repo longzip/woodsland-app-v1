@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/styles/withStyles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import CardItem from "../../components/cards/CardItem";
+import CardWorkorder from "../../components/cards/CardWorkorder";
 import Topbar from "../../components/Topbar";
 import SectionHeader from "../../components/typo/SectionHeader";
 import { connect } from "react-redux";
@@ -11,6 +11,7 @@ import SelectedWorkcenterActions from "../../Stores/SelectedWorkcenter/Actions";
 import WorkcenterProductivitiesActions from "../../Stores/WorkcenterProductivities/Actions";
 import WorkordersActions from "../../Stores/Workorders/Actions";
 import { makeGetWorkcenterWorkorders } from "../../Stores/Selectors";
+import BackWorkcenter from "../../components/common/BackWorkcenter";
 const backgroundShape = require("../../images/shape.svg");
 
 const styles = theme => ({
@@ -38,7 +39,6 @@ class WorkcenterDetailContainer extends Component {
     );
   }
   componentDidMount() {
-    console.log(this.props);
     this._fetchWorkcenter();
     this._fetchWorkorders();
   }
@@ -51,6 +51,7 @@ class WorkcenterDetailContainer extends Component {
       <React.Fragment>
         <CssBaseline />
         <Topbar currentPath={currentPath} />
+        <BackWorkcenter name={this.props.workcenter.name} />
         <div className={classes.root}>
           <Grid container justify="center">
             <Grid
@@ -60,12 +61,8 @@ class WorkcenterDetailContainer extends Component {
               className={classes.grid}
             >
               <Grid item xs={12}>
-                <SectionHeader
-                  title="Cards"
-                  subtitle="One page with a list of a collection"
-                />
-                {this.props.workorders.map((item, index) => (
-                  <CardItem />
+                {this.props.workorders.map((item, key) => (
+                  <CardWorkorder key={key} workorders={item} />
                 ))}
               </Grid>
             </Grid>
