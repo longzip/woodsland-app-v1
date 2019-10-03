@@ -12,30 +12,25 @@ export default props => (
   <HashRouter>
     <ScrollToTop>
       <Switch>
-        <PrivateRoute
-          authed={this.props.userAuth}
-          exact
-          path="/"
-          component={Main}
-        />
-        <PrivateRoute
+        <Route authed={props.userAuth} exact path="/" component={Main} />
+        <Route
           exact
           path="/productions"
           component={ProductionsContainer}
-          authed={this.props.userAuth}
+          authed={props.userAuth}
         />
-        <PrivateRoute
+        <Route
           exact
           path="/production/:id"
           component={ProductionDetailContainer}
-          authed={this.props.userAuth}
+          authed={props.userAuth}
         />
         <Route exact path="/login" component={Login} />
-        <PrivateRoute
+        <Route
           exact
           path="/workcenter/:id"
           component={WorkcenterDetailContainer}
-          authed={this.props.userAuth}
+          authed={props.userAuth}
         />
       </Switch>
     </ScrollToTop>
