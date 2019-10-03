@@ -8,6 +8,7 @@ import { reducer as workcentersReducer } from "./Workcenters/Reducers";
 import { reducer as selectedWorkorderReducer } from "./SelectedWorkorder/Reducers";
 import { reducer as selectedWorkcenterReducer } from "./SelectedWorkcenter/Reducers";
 import { reducer as workcenterProductivitiesReducer } from "./WorkcenterProductivities/Reducers";
+import { reducer as loginedUserReducer } from "./LoginedUser/Reducers";
 
 export default () => {
   const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ export default () => {
     workcentersReducer,
     selectedWorkorderReducer,
     selectedWorkcenterReducer,
-    workcenterProductivitiesReducer
+    workcenterProductivitiesReducer,
+    loginedUserReducer
   });
 
   return configureStore(rootReducer, rootSaga);

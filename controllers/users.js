@@ -2,8 +2,7 @@ const { User } = require("../models/index");
 const Joi = require("@hapi/joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const environment = process.env.NODE_ENV;
-const stage = 30;
+const stage = 10;
 
 function validateUser(user) {
   const schema = {
@@ -16,7 +15,6 @@ function validateUser(user) {
     password: Joi.string()
       .regex(/^[a-zA-Z0-9]{3,30}$/)
       .required(),
-    // confirmPassword: Joi.any().valid(Joi.ref('password')).required(),
     email: Joi.string().email({ minDomainSegments: 2 })
   };
   return Joi.validate(user, schema);
@@ -48,7 +46,6 @@ module.exports = {
     let { error, value } = validateUser(req.body);
 
     if (error) {
-      // console.log(error);
       status = 500;
       result.status = status;
       result.error = error;
@@ -63,9 +60,6 @@ module.exports = {
         return res.status(status).send(result);
       } else {
         value.password = hash;
-        // User.destroy({ where: { } });
-        // User.sync();
-
         User.create(value)
           .then(user => {
             result.status = status;
@@ -158,7 +152,6 @@ module.exports = {
 
     User.findAll()
       .then(users => {
-        // users will be an array of all User instances
         result.status = status;
         result.result = users;
         return res.status(status).send(result);
@@ -169,30 +162,15 @@ module.exports = {
         result.error = err;
         return res.status(status).send(result);
       });
-
-    // const payload = req.decoded;
-    // TODO: Log the payload here to verify that it's the same payload
-    //  we used when we created the token
-    // console.log("PAYLOAD", payload);
-    // if (payload && payload.user !== "admin") {
-    //   // find multiple entries
-    // } else {
-    //   status = 401;
-    //   result.status = status;
-    //   result.error = `Authentication error`;
-    //   res.status(status).send(result);
-    // }
   },
 
   login: (req, res) => {
     let result = {};
     let status = 200;
     const { username, password } = req.body;
-    // console.log(username);
-    // console.log(password);
+
     User.findOne({ where: { username } })
       .then(user => {
-        console.log(user);
         // We could compare passwords in our model instead of below as well
         bcrypt
           .compare(password, user.password)
@@ -200,17 +178,16 @@ module.exports = {
             if (match) {
               status = 200;
               // Create a token
-              // console.log("tim thay");
+
               const payload = { user: user.name };
               const options = {
                 expiresIn: "2d",
                 issuer: "https://woodsland.com.vn"
               };
               const secret = "sdkfjksdjkfjkjfsiojfksdjkfsd";
-              // console.log(secret);
+
               const token = jwt.sign(payload, secret, options);
 
-              // console.log("TOKEN", token);
               result.token = token;
               result.status = status;
               result.result = {
@@ -223,7 +200,6 @@ module.exports = {
                 rights: ["can_view_users"]
               };
             } else {
-              // console.log("khong dung mat khau");
               status = 401;
               result.status = status;
               result.error = `Authentication error`;
@@ -238,7 +214,6 @@ module.exports = {
           });
       })
       .catch(err => {
-        // console.log("khong bcrypt");
         status = 500;
         result.status = status;
         result.error = err;

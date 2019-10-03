@@ -1,17 +1,21 @@
-const multer = require('multer');
+const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'server/public/excels/');
+    cb(null, "public/excels/");
   },
   filename: function(req, file, cb) {
-    cb(null, new Date().toISOString().slice(0,10) + file.originalname);
+    cb(null, new Date().toISOString().slice(0, 10) + file.originalname);
   }
 });
 
 const fileFilter = (req, file, cb) => {
   // reject a file
-  if (file.mimetype === 'application/vnd.ms-excel' || file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+  if (
+    file.mimetype === "application/vnd.ms-excel" ||
+    file.mimetype ===
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  ) {
     cb(null, true);
   } else {
     // throw new Error("Chon file Excel");

@@ -4,7 +4,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import CardWorkorder from "../../components/cards/CardWorkorder";
 import Topbar from "../../components/Topbar";
-import SectionHeader from "../../components/typo/SectionHeader";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import SelectedWorkcenterActions from "../../Stores/SelectedWorkcenter/Actions";

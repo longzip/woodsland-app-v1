@@ -1,9 +1,8 @@
 import React from "react";
 import { Route, HashRouter, Switch } from "react-router-dom";
-import Wizard from "./components/Wizard";
-import Cards from "./components/Cards";
+import PrivateRoute from "./components/PrivateRoute";
 import Main from "./components/Main";
-import Signup from "./components/Signup";
+import Login from "./components/Login";
 import ScrollToTop from "./components/ScrollTop";
 import WorkcenterDetailContainer from "./containers/Workcenters/WorkcenterDetailContainer";
 import ProductionsContainer from "./containers/Productions/ProductionsContainer";
@@ -13,20 +12,30 @@ export default props => (
   <HashRouter>
     <ScrollToTop>
       <Switch>
-        <Route exact path="/" component={Main} />
-        <Route exact path="/productions" component={ProductionsContainer} />
-        <Route
+        <PrivateRoute
+          authed={this.props.userAuth}
+          exact
+          path="/"
+          component={Main}
+        />
+        <PrivateRoute
+          exact
+          path="/productions"
+          component={ProductionsContainer}
+          authed={this.props.userAuth}
+        />
+        <PrivateRoute
           exact
           path="/production/:id"
           component={ProductionDetailContainer}
+          authed={this.props.userAuth}
         />
-        <Route exact path="/signup" component={Signup} />
-        <Route exact path="/wizard" component={Wizard} />
-        <Route exact path="/cards" component={Cards} />
-        <Route
+        <Route exact path="/login" component={Login} />
+        <PrivateRoute
           exact
           path="/workcenter/:id"
           component={WorkcenterDetailContainer}
+          authed={this.props.userAuth}
         />
       </Switch>
     </ScrollToTop>

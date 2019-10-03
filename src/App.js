@@ -1,14 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Routes from "./routes";
 import { ThemeProvider } from "@material-ui/styles";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/lib/integration/react";
-import createStore from "./Stores";
 import theme from "./theme";
-
-const { store, persistor } = createStore();
 
 function Copyright() {
   return (
@@ -23,15 +19,20 @@ function Copyright() {
   );
 }
 
-export default function App() {
-  return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider theme={theme}>
-          <Routes />
-          <Copyright />
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
-  );
+export class App extends React.Component {
+  render() {
+    const { userAuth } = this.props;
+    return (
+      <ThemeProvider theme={theme}>
+        <Routes userAuth={userAuth} />
+        <Copyright />
+      </ThemeProvider>
+    );
+  }
 }
+
+const mapStateToProps = state => ({
+  userAuth: state.loginedUserReducer.user
+});
+
+export default connect(mapStateToProps)(App);

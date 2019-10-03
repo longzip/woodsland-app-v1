@@ -98,18 +98,6 @@ module.exports = {
         result.error = err;
         return res.status(status).send(result);
       });
-    // WorkcenterProductivity.sync({
-    //   force: true
-    // })
-    //   .then(() => {
-
-    //   })
-    //   .catch(err => {
-    //     status = 500;
-    //     result.status = status;
-    //     result.error = err;
-    //     return res.status(status).send(result);
-    //   });
   },
 
   update: (req, res) => {
