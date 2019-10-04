@@ -7,36 +7,35 @@ import Grid from "@material-ui/core/Grid";
 import SelectedProductionActions from "../../Stores/SelectedProduction/Actions";
 import WorkordersActions from "../../Stores/Workorders/Actions";
 import Back from "../../components/common/Back";
+import CardWorkorder from "../../components/cards/CardWorkorder";
+
 const backgroundShape = require("../../images/shape.svg");
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.secondary["A100"],
-    overflow: "hidden",
-    background: `url(${backgroundShape}) no-repeat`,
-    backgroundSize: "cover",
-    backgroundPosition: "0 400px",
-    marginTop: 10,
-    padding: 20,
-    paddingBottom: 500
-  }
-});
 class ProductionDetailContainer extends Component {
   componentDidMount() {
     this._fetchProduction();
     this._fetchWorkorders();
   }
   render() {
+    console.log(this.props);
     const { classes } = this.props;
     const { production, workorders } = this.props;
-    console.log(production);
-    console.log(workorders);
     return (
       <React.Fragment>
         <div className={classes.root}>
-          <Back />
-          <Grid container justify="center"></Grid>
+          <Back name={production.name} pathname="/productions" />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              {workorders.map((item, key) => (
+                <CardWorkorder
+                  key={key}
+                  workorder={item}
+                  handleEdit={null}
+                  edit={false}
+                />
+              ))}
+            </Grid>
+          </Grid>
         </div>
       </React.Fragment>
     );
@@ -95,6 +94,20 @@ const mapDispatchToProps = dispatch => ({
     dispatch(SelectedProductionActions.fetchProductionTodo(id)),
   fetchWorkorders: productionId =>
     dispatch(WorkordersActions.fetchWorkorders(productionId))
+});
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.secondary["A100"],
+    overflow: "hidden",
+    background: `url(${backgroundShape}) no-repeat`,
+    backgroundSize: "cover",
+    backgroundPosition: "0 400px",
+    marginTop: 10,
+    padding: 20,
+    paddingBottom: 500
+  }
 });
 
 export default withRouter(

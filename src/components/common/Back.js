@@ -17,13 +17,13 @@ const styles = theme => ({
 
 class Back extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, name, pathname } = this.props;
     return (
       <div>
         <Typography variant="h6" gutterBottom>
-          <Link className={classes.link} to={{ pathname: "/productions" }}>
+          <Link className={classes.link} to={{ pathname }}>
             <KeyboardArrowLeft />
-            <span className={classes.text}>Lệnh sản xuất</span>
+            <span className={classes.text}>{name}</span>
           </Link>
         </Typography>
       </div>

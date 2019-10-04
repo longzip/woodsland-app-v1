@@ -3,7 +3,8 @@ const {
   Contact,
   OrderLine,
   RoutingWorkcenter,
-  Workorder
+  Workorder,
+  Product
 } = require("../models/index");
 const Joi = require("@hapi/joi");
 const { Op } = require("sequelize");
@@ -218,7 +219,7 @@ module.exports = {
     console.log(req.query.name);
     // find multiple entries
     Production.findAll({
-      include: [{ model: OrderLine }, { model: Contact }],
+      include: [{ model: OrderLine }, { model: Contact }, { model: Product }],
       offset: req.query.offset || 0,
       limit: req.query.limit || 0,
       where: req.query.name

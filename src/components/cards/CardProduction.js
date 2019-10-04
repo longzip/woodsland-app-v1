@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Avatar from "@material-ui/core/Avatar";
-import DescriptionIcon from "@material-ui/icons/Description";
 import ButtonBarProduction from "../buttons/ButtonBarProduction";
 
 const styles = theme => ({
@@ -77,61 +75,37 @@ class CardItem extends Component {
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <div className={classes.itemContainer}>
-            <div className={classes.avatarContainer}>
-              <Avatar className={classes.avatar}>
-                <DescriptionIcon />
-              </Avatar>
-            </div>
             <div className={classes.baseline}>
               <div className={classes.inline}>
-                <Typography
-                  style={{ textTransform: "uppercase" }}
-                  color="secondary"
-                  gutterBottom
-                >
-                  {production.name}
+                <Typography style={{ textTransform: "uppercase" }} gutterBottom>
+                  Lệnh sản xuất: {production.name}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  {production.datePlannedFinished}
+                  Ngày hoàn thành: {production.datePlannedFinished}
                 </Typography>
               </div>
               <div className={classes.inline}>
                 <Typography
                   style={{ textTransform: "uppercase" }}
                   color="secondary"
+                  variant="h4"
                   gutterBottom
                 >
-                  {production.Product && production.Product.name}
+                  {production.Product.name}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  {production.productDimension}
+                  Kích thước: {production.productDimension}
                 </Typography>
               </div>
               <div className={classes.inline}>
-                <Typography
-                  style={{ textTransform: "uppercase" }}
-                  color="secondary"
-                  gutterBottom
-                >
-                  {production.productQty}
+                <Typography style={{ textTransform: "uppercase" }} gutterBottom>
+                  Số lượng cần sản xuất:{production.productQty}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                   {production.productUom} / {production.factor}
                 </Typography>
+                <ButtonBarProduction handleEdit={this.props.handleEdit} />
               </div>
-            </div>
-            <div className={classes.inlineRight}>
-              <Typography
-                style={{ textTransform: "uppercase" }}
-                color="secondary"
-                gutterBottom
-              >
-                Other Amount
-              </Typography>
-              <Typography variant="h4" gutterBottom>
-                Once a month
-              </Typography>
-              <ButtonBarProduction handleEdit={this.props.handleEdit} />
             </div>
           </div>
         </Paper>

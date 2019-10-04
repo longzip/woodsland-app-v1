@@ -159,8 +159,7 @@ module.exports = {
       include: [
         { model: Product },
         { model: Production },
-        { model: Workcenter },
-        { model: WorkcenterProductivity }
+        { model: Workcenter }
       ],
       offset: req.query.offset || 0,
       limit: req.query.limit || 0,

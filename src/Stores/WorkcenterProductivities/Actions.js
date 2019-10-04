@@ -1,10 +1,14 @@
-import { createActions } from 'reduxsauce'
+import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-  saveWorkcenterProductivity: null,
-  saveWorkcenterProductivitySuccess: ['successMessage'],
-  saveWorkcenterProductivityFailure: ['errorMessage'],
-})
+  fetchWorkcenterProductivities: null,
+  fetchWorkcenterProductivitiesLoading: null,
+  fetchWorkcenterProductivitiesSuccess: ["workcenterProductivities"],
+  fetchWorkcenterProductivitiesFailure: ["errorMessage"],
+  saveWorkcenterProductivity: ["workcenterProductivityBeingAddedOrEdited"],
+  saveWorkcenterProductivitySuccess: ["successMessage"],
+  saveWorkcenterProductivityFailure: ["errorMessage"]
+});
 
-export const WorkcenterProductivitiesTypes = Types
-export default Creators
+export const WorkcenterProductivitiesTypes = Types;
+export default Creators;

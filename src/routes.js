@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, HashRouter, Switch } from "react-router-dom";
-import PrivateRoute from "./components/PrivateRoute";
+// import PrivateRoute from "./components/PrivateRoute";
 import Main from "./components/Main";
 import Login from "./components/Login";
 import ScrollToTop from "./components/ScrollTop";

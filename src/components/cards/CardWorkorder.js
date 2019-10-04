@@ -1,10 +1,98 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import withStyles from "@material-ui/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import Avatar from "@material-ui/core/Avatar";
-import DescriptionIcon from "@material-ui/icons/Description";
 import ButtonBar from "../buttons/ButtonBar";
+import {
+  makeGetWorkorderProductivities,
+  makeGetNextWorkorderProductivities
+} from "../../Stores/Selectors";
+
+class CardItem extends Component {
+  render() {
+    const {
+      classes,
+      workorderProductivities,
+      nextworkorderProductivities,
+      edit = true
+    } = this.props;
+    const {
+      productUom,
+      factor,
+      Production,
+      Product,
+      Workcenter
+    } = this.props.workorder;
+
+    console.log(this.props);
+
+    return (
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <div className={classes.itemContainer}>
+            <div className={classes.baseline}>
+              <div className={classes.inline}>
+                <Typography style={{ textTransform: "uppercase" }} gutterBottom>
+                  {Production.name} / {Workcenter.name}
+                </Typography>
+                <Typography variant="h4" gutterBottom>
+                  {Product.name}
+                </Typography>
+              </div>
+              <div className={classes.inline}>
+                <Typography
+                  variant="h6"
+                  style={{ textTransform: "uppercase" }}
+                  gutterBottom
+                >
+                  {Production.productDimension}
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {productUom} x {factor}
+                </Typography>
+              </div>
+              <div className={classes.inlineRight}>
+                <Typography style={{ textTransform: "uppercase" }} gutterBottom>
+                  Cần thực hiện
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {Production.productQty}
+                </Typography>
+              </div>
+              <div className={classes.inline}>
+                <Typography
+                  style={{ textTransform: "uppercase" }}
+                  color="secondary"
+                  gutterBottom
+                >
+                  Đã thực hiện:{" "}
+                  {this._workcenterProductivitiesNumber(
+                    workorderProductivities
+                  )}
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  Tồn tại tổ:
+                  {nextworkorderProductivities &&
+                    this._workcenterProductivitiesNumber(
+                      nextworkorderProductivities
+                    )}
+                </Typography>
+                {edit && <ButtonBar handleEdit={this.props.handleEdit} />}
+              </div>
+            </div>
+          </div>
+        </Paper>
+      </div>
+    );
+  }
+  _workcenterProductivitiesNumber(workcenterProductivities) {
+    return workcenterProductivities.reduce(
+      (acc, item) => acc + item.qtyProduced,
+      0
+    );
+  }
+}
 
 const styles = theme => ({
   paper: {
@@ -70,75 +158,17 @@ const styles = theme => ({
   }
 });
 
-class CardItem extends Component {
-  render() {
-    const { classes } = this.props;
+const makeMapStateToProps = () => {
+  const getWorkorderProductivities = makeGetWorkorderProductivities();
+  const getNextWorkorderProductivities = makeGetNextWorkorderProductivities();
 
-    return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <div className={classes.itemContainer}>
-            <div className={classes.avatarContainer}>
-              <Avatar className={classes.avatar}>
-                <DescriptionIcon />
-              </Avatar>
-            </div>
-            <div className={classes.baseline}>
-              <div className={classes.inline}>
-                <Typography
-                  style={{ textTransform: "uppercase" }}
-                  color="secondary"
-                  gutterBottom
-                >
-                  Months
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  4 month(s)
-                </Typography>
-              </div>
-              <div className={classes.inline}>
-                <Typography
-                  style={{ textTransform: "uppercase" }}
-                  color="secondary"
-                  gutterBottom
-                >
-                  Creation date
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  01 February 2019
-                </Typography>
-              </div>
-              <div className={classes.inline}>
-                <Typography
-                  style={{ textTransform: "uppercase" }}
-                  color="secondary"
-                  gutterBottom
-                >
-                  Amount
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  6,600 USD
-                </Typography>
-              </div>
-            </div>
-            <div className={classes.inlineRight}>
-              <Typography
-                style={{ textTransform: "uppercase" }}
-                color="secondary"
-                gutterBottom
-              >
-                Other Amount
-              </Typography>
-              <Typography variant="h4" gutterBottom>
-                Once a month
-              </Typography>
-              <ButtonBar />
-            </div>
-          </div>
-        </Paper>
-      </div>
-    );
-  }
-}
+  const mapStateToProps = (state, props) => {
+    return {
+      workorderProductivities: getWorkorderProductivities(state, props),
+      nextworkorderProductivities: getNextWorkorderProductivities(state, props)
+    };
+  };
+  return mapStateToProps;
+};
 
-export default withStyles(styles)(CardItem);
+export default withStyles(styles)(connect(makeMapStateToProps)(CardItem));

@@ -6,6 +6,13 @@ import CardWorkorder from "../../components/cards/CardWorkorder";
 import Topbar from "../../components/Topbar";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import SelectedWorkcenterActions from "../../Stores/SelectedWorkcenter/Actions";
 import WorkcenterProductivitiesActions from "../../Stores/WorkcenterProductivities/Actions";
 import WorkordersActions from "../../Stores/Workorders/Actions";
@@ -33,17 +40,39 @@ const styles = theme => ({
 class WorkcenterDetailContainer extends Component {
   constructor() {
     super();
+    this.state = {
+      open: false,
+      textInputValue: "",
+      item: {}
+    };
     this._saveWorkcenterProductivity = this._saveWorkcenterProductivity.bind(
       this
     );
+    this.handleClose = this.handleClose.bind(this);
   }
   componentDidMount() {
     this._fetchWorkcenter();
     this._fetchWorkorders();
+    this.props.fetchWorkcenterProductivities();
   }
 
+  handleClickOpen(item) {
+    this.setState(() => ({ item }));
+    this.setState({ open: true });
+  }
+
+  handleClose() {
+    this.setState({ open: false });
+  }
+  handleChange = event => {
+    const {
+      target: { value }
+    } = event;
+    this.setState(() => ({ textInputValue: value }));
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, workorders } = this.props;
     const currentPath = this.props.location.pathname;
 
     return (
@@ -60,12 +89,50 @@ class WorkcenterDetailContainer extends Component {
               className={classes.grid}
             >
               <Grid item xs={12}>
-                {this.props.workorders.map((item, key) => (
-                  <CardWorkorder key={key} workorders={item} />
+                {workorders.map((item, key) => (
+                  <CardWorkorder
+                    key={key}
+                    workorder={item}
+                    handleEdit={this.handleClickOpen.bind(this, item)}
+                  />
                 ))}
               </Grid>
             </Grid>
           </Grid>
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Nhập số liệu</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Bạn đã sản xuất được bao nhiêu? Ghi nhận số liệu tại ô trống
+                dưới đây.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Số lượng"
+                type="number"
+                fullWidth
+                value={this.state.textInputValue}
+                onChange={this.handleChange}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Hủy
+              </Button>
+              <Button
+                onClick={this._saveWorkcenterProductivity}
+                color="primary"
+              >
+                Ghi nhận
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </React.Fragment>
     );
@@ -81,11 +148,26 @@ class WorkcenterDetailContainer extends Component {
   _fetchWorkorders() {
     this.props.fetchWorkorders();
   }
-  _saveWorkcenterProductivity(workcenterProductivityBeingAddedOrEdited) {
-    this.props.saveWorkcenterProductivity(
-      workcenterProductivityBeingAddedOrEdited
-    );
-    this._fetchWorkorders();
+  _saveWorkcenterProductivity() {
+    const {
+      id,
+      ProductionId,
+      WorkcenterId,
+      ProductId,
+      productUom
+    } = this.state.item;
+    const workcenterProductivity = {
+      ProductionId,
+      WorkorderId: id,
+      ProductId,
+      WorkcenterId,
+      qtyProduced: this.state.textInputValue,
+      productUom
+    };
+    // console.log(workcenterProductivity);
+    this.props.saveWorkcenterProductivity(workcenterProductivity);
+    this.setState({ open: false });
+    this.setState(() => ({ textInputValue: "" }));
   }
 }
 
@@ -130,7 +212,9 @@ const mapDispatchToProps = dispatch => ({
       WorkcenterProductivitiesActions.saveWorkcenterProductivity(
         workcenterProductivityBeingAddedOrEdited
       )
-    )
+    ),
+  fetchWorkcenterProductivities: () =>
+    dispatch(WorkcenterProductivitiesActions.fetchWorkcenterProductivities())
 });
 
 export default withStyles(styles)(

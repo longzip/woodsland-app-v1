@@ -21,10 +21,10 @@ const makeGetVisibleTodos = () => {
   );
 };
 
-const getWorkcenterFilter = (state, props) => parseInt(props.match.params.id);
-
+// Get Workorders
 const getWorkorders = state => state.workordersReducer.workorders;
 
+const getWorkcenterFilter = (state, props) => parseInt(props.match.params.id);
 const makeGetWorkcenterWorkorders = () => {
   return createSelector(
     [getWorkcenterFilter, getWorkorders],
@@ -35,4 +35,50 @@ const makeGetWorkcenterWorkorders = () => {
   );
 };
 
-export { makeGetVisibleTodos, makeGetWorkcenterWorkorders };
+const getProductionFilter = (state, props) => props.production.id;
+const makeGetProductionWorkorders = () => {
+  return createSelector(
+    [getProductionFilter, getWorkorders],
+    (workcenterFilter, workorders) =>
+      workorders.filter(
+        workorder => workorder.ProductionId === getProductionFilter
+      )
+  );
+};
+
+const getWorkorderFilter = (state, props) => props.workorder.id;
+const getNextWorkorderFilter = (state, props) =>
+  props.workorder.nextWorkOrderId;
+
+const getWorkcenterProductivities = state =>
+  state.workcenterProductivitiesReducer.workcenterProductivities;
+
+const makeGetWorkorderProductivities = () => {
+  return createSelector(
+    [getWorkorderFilter, getWorkcenterProductivities],
+    (workorderFilter, workcenterProductivities) =>
+      workcenterProductivities.filter(
+        workcenterProductivity =>
+          workcenterProductivity.WorkorderId === workorderFilter
+      )
+  );
+};
+
+const makeGetNextWorkorderProductivities = () => {
+  return createSelector(
+    [getNextWorkorderFilter, getWorkcenterProductivities],
+    (nextWorkorderFilter, workcenterProductivities) =>
+      workcenterProductivities.filter(
+        workcenterProductivity =>
+          workcenterProductivity.WorkorderId === nextWorkorderFilter
+      )
+  );
+};
+
+export {
+  makeGetVisibleTodos,
+  makeGetWorkcenterWorkorders,
+  makeGetProductionWorkorders,
+  makeGetWorkorderProductivities,
+  makeGetNextWorkorderProductivities
+};

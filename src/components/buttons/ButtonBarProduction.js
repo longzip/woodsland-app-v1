@@ -21,7 +21,7 @@ class ButtonBarProduction extends Component {
 
     return (
       <div className={classes.spaceTop}>
-        <Button className={classes.primary}>Dừng</Button>
+        {/* <Button className={classes.primary}>Dừng</Button> */}
         <Button
           variant="contained"
           color="primary"
