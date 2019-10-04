@@ -4,8 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     "WorkcenterProductivity",
     {
       qtyProduced: DataTypes.INTEGER,
+      loss: DataTypes.INTEGER,
       productUom: DataTypes.STRING,
-      factor: DataTypes.INTEGER
+      factor: DataTypes.INTEGER,
+      isChecked: DataTypes.BOOLEAN,
+      isChecked: DataTypes.BOOLEAN,
+      accepted: DataTypes.BOOLEAN
     },
     {}
   );
@@ -13,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     WorkcenterProductivity.belongsTo(models.Workcenter);
     WorkcenterProductivity.belongsTo(models.Workorder);
     WorkcenterProductivity.belongsTo(models.Product);
+    WorkcenterProductivity.belongsTo(models.Pallet);
     WorkcenterProductivity.belongsTo(models.User);
   };
   return WorkcenterProductivity;

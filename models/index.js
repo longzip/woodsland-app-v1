@@ -37,26 +37,32 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-// sequelize
-//   .sync({
-//     force: true
-//   })
-//   .then(() => {
-//     //Settings
-//     db.User.bulkCreate(require("../data/Users"));
-//     db.Uom.bulkCreate(require("../data/Uoms"));
-//     //
-//     db.Product.bulkCreate(require("../data/Products"));
-//     db.Workcenter.bulkCreate(require("../data/Workcenters"));
-//     //Sales
-//     db.Contact.bulkCreate(require("../data/Contacts"));
-//     // db.Order.bulkCreate(require("../data/Orders"));
-//     // db.OrderLine.bulkCreate(require("../data/OrderLines"));
-//     //Mpr
-//     db.Routing.bulkCreate(require("../data/Routings"));
-//     db.RoutingWorkcenter.bulkCreate(require("../data/RoutingWorkcenters"));
-//     db.Production.bulkCreate(require("../data/Productions"));
-//   });
+sequelize
+  .sync({
+    force: true
+  })
+  .then(() => {
+    //Settings
+    db.User.bulkCreate(require("../data/Users"));
+    db.Uom.bulkCreate(require("../data/Uoms"));
+    //
+    db.Product.bulkCreate(require("../data/Products"));
+    db.Workcenter.bulkCreate(require("../data/Workcenters"));
+    //Sales
+    db.Contact.bulkCreate(require("../data/Contacts"));
+    // db.Order.bulkCreate(require("../data/Orders"));
+    // db.OrderLine.bulkCreate(require("../data/OrderLines"));
+    //Mpr
+    db.Routing.bulkCreate(require("../data/Routings"));
+    db.RoutingWorkcenter.bulkCreate(require("../data/RoutingWorkcenters"));
+    db.Production.bulkCreate(require("../data/Productions"));
+  })
+  .then(() => {
+    console.log("Done!");
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
