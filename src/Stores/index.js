@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { reducer as reduxFormReducer } from "redux-form";
 import configureStore from "./CreateStore";
 import rootSaga from "../Sagas";
 import { reducer as productionsReducer } from "./Productions/Reducers";
@@ -12,6 +13,7 @@ import { reducer as loginedUserReducer } from "./LoginedUser/Reducers";
 
 export default () => {
   const rootReducer = combineReducers({
+    form: reduxFormReducer,
     productionsReducer,
     selectedProductionReducer,
     workordersReducer,

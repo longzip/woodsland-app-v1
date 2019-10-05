@@ -2,8 +2,7 @@ const {
   Workorder,
   Production,
   Product,
-  Workcenter,
-  WorkcenterProductivity
+  Workcenter
 } = require("../models/index");
 const Joi = require("@hapi/joi");
 const { Op } = require("sequelize");

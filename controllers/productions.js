@@ -14,6 +14,7 @@ function validate(data) {
   const schema = {
     name: Joi.string().required(),
     origin: Joi.string(),
+    productDimension: Joi.string(),
     productQty: Joi.number(),
     productUom: Joi.string(),
     factor: Joi.number(),
@@ -45,7 +46,7 @@ async function todo(productionId) {
     where: {
       RoutingId: production.RoutingId
     },
-    order: [["sequence", "DESC"]]
+    order: [["sequence", "ASC"]]
   });
 
   let workorders = [];
@@ -59,6 +60,7 @@ async function todo(productionId) {
         WorkcenterId: routingWorkorder.WorkcenterId,
         ProductionId: productionId,
         ProductId: production.ProductId,
+        ContactId: production.ContactId,
         productUom: production.productUom,
         factor: production.factor
       },
@@ -106,6 +108,8 @@ module.exports = {
     Production.create(value)
       .then(item => {
         result.status = status;
+        console.log("get id ljsdfsdjfjsdfjsldjfsd:");
+        todo(item.get("id"));
         result.result = item;
         return res.status(status).send(result);
       })
@@ -120,7 +124,7 @@ module.exports = {
   show: (req, res) => {
     let result = {};
     let status = 200;
-
+    todo(req.params.id);
     Production.findOne({
       include: [{ model: OrderLine }, { model: Contact }],
       where: {

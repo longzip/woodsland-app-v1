@@ -7,6 +7,7 @@ import ScrollToTop from "./components/ScrollTop";
 import WorkcenterDetailContainer from "./containers/Workcenters/WorkcenterDetailContainer";
 import ProductionsContainer from "./containers/Productions/ProductionsContainer";
 import ProductionDetailContainer from "./containers/Productions/ProductionDetailContainer";
+import AddOrEditProductionContainer from "./containers/Productions/AddOrEditProductionContainer";
 
 export default props => (
   <HashRouter>
@@ -21,10 +22,23 @@ export default props => (
         />
         <Route
           exact
-          path="/production/:id"
+          path="/production/:id/detail"
           component={ProductionDetailContainer}
           authed={props.userAuth}
         />
+        <Route
+          exact
+          path="/production/:id"
+          component={AddOrEditProductionContainer}
+          authed={props.userAuth}
+        />
+        <Route
+          exact
+          path="/production"
+          component={AddOrEditProductionContainer}
+          authed={props.userAuth}
+        />
+
         <Route exact path="/login" component={Login} />
         <Route
           exact

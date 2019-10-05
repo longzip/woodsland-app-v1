@@ -1,26 +1,5 @@
 import { createSelector } from "reselect";
 
-const getVisibilityFilter = (state, props) =>
-  state.todoLists[props.listId].visibilityFilter;
-
-const getTodos = (state, props) => state.todoLists[props.listId].todos;
-
-const makeGetVisibleTodos = () => {
-  return createSelector(
-    [getVisibilityFilter, getTodos],
-    (visibilityFilter, todos) => {
-      switch (visibilityFilter) {
-        case "SHOW_COMPLETED":
-          return todos.filter(todo => todo.completed);
-        case "SHOW_ACTIVE":
-          return todos.filter(todo => !todo.completed);
-        default:
-          return todos;
-      }
-    }
-  );
-};
-
 // Get Workorders
 const getWorkorders = state => state.workordersReducer.workorders;
 
@@ -35,13 +14,13 @@ const makeGetWorkcenterWorkorders = () => {
   );
 };
 
-const getProductionFilter = (state, props) => props.production.id;
+const getProductionFilter = (state, props) => parseInt(props.match.params.id);
 const makeGetProductionWorkorders = () => {
   return createSelector(
     [getProductionFilter, getWorkorders],
-    (workcenterFilter, workorders) =>
+    (productionFilter, workorders) =>
       workorders.filter(
-        workorder => workorder.ProductionId === getProductionFilter
+        workorder => workorder.ProductionId === productionFilter
       )
   );
 };
@@ -76,7 +55,6 @@ const makeGetNextWorkorderProductivities = () => {
 };
 
 export {
-  makeGetVisibleTodos,
   makeGetWorkcenterWorkorders,
   makeGetProductionWorkorders,
   makeGetWorkorderProductivities,

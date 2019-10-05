@@ -14,11 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   WorkcenterProductivity.associate = function(models) {
+    WorkcenterProductivity.belongsTo(models.Production);
     WorkcenterProductivity.belongsTo(models.Workcenter);
     WorkcenterProductivity.belongsTo(models.Workorder);
     WorkcenterProductivity.belongsTo(models.Product);
     WorkcenterProductivity.belongsTo(models.Pallet);
     WorkcenterProductivity.belongsTo(models.User);
+    WorkcenterProductivity.belongsTo(models.Contact);
   };
   return WorkcenterProductivity;
 };

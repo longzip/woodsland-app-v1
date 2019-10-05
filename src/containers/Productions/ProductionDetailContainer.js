@@ -8,7 +8,7 @@ import SelectedProductionActions from "../../Stores/SelectedProduction/Actions";
 import WorkordersActions from "../../Stores/Workorders/Actions";
 import Back from "../../components/common/Back";
 import CardWorkorder from "../../components/cards/CardWorkorder";
-
+import { makeGetProductionWorkorders } from "../../Stores/Selectors";
 const backgroundShape = require("../../images/shape.svg");
 
 class ProductionDetailContainer extends Component {
@@ -76,16 +76,22 @@ ProductionDetailContainer.propTypes = {
   saveProduction: PropTypes.func
 };
 
-const mapStateToProps = state => ({
-  production: state.selectedProductionReducer.production,
-  productionIsLoading: state.selectedProductionReducer.productionIsLoading,
-  productionErrorMessage:
-    state.selectedProductionReducer.productionErrorMessage,
-  //Workorder
-  workorders: state.workordersReducer.workorders,
-  workordersIsLoading: state.workordersReducer.workordersIsLoading,
-  workordersErrorMessage: state.workordersReducer.workordersErrorMessage
-});
+const makeMapStateToProps = () => {
+  const getProductionWorkorders = makeGetProductionWorkorders();
+  const mapStateToProps = (state, props) => {
+    return {
+      production: state.selectedProductionReducer.production,
+      productionIsLoading: state.selectedProductionReducer.productionIsLoading,
+      productionErrorMessage:
+        state.selectedProductionReducer.productionErrorMessage,
+      //Workorder
+      workorders: getProductionWorkorders(state, props),
+      workordersIsLoading: state.workordersReducer.workordersIsLoading,
+      workordersErrorMessage: state.workordersReducer.workordersErrorMessage
+    };
+  };
+  return mapStateToProps;
+};
 
 const mapDispatchToProps = dispatch => ({
   fetchProduction: id =>
@@ -113,7 +119,7 @@ const styles = theme => ({
 export default withRouter(
   withStyles(styles)(
     connect(
-      mapStateToProps,
+      makeMapStateToProps,
       mapDispatchToProps
     )(ProductionDetailContainer)
   )

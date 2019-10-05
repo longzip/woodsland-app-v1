@@ -4,9 +4,8 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import ProductionsActions from "../../Stores/Productions/Actions";
 import CardProduction from "../../components/cards/CardProduction";
-import { CssBaseline, Grid } from "@material-ui/core";
+import { CssBaseline, Grid, Typography, Button } from "@material-ui/core";
 import Topbar from "../../components/Topbar";
-import SectionHeader from "../../components/typo/SectionHeader";
 const backgroundShape = require("../../images/shape.svg");
 const styles = theme => ({
   root: {
@@ -22,6 +21,11 @@ const styles = theme => ({
   },
   grid: {
     width: 1000
+  },
+  topBar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
   }
 });
 class ProductionsContainer extends Component {
@@ -29,7 +33,7 @@ class ProductionsContainer extends Component {
     this._fetchProductions();
   }
   handleEdit(e) {
-    this.props.history.push("/production/" + e.id);
+    this.props.history.push("/production/" + e.id + "/detail");
   }
   render() {
     const { classes } = this.props;
@@ -47,10 +51,27 @@ class ProductionsContainer extends Component {
               className={classes.grid}
             >
               <Grid item xs={12}>
-                <SectionHeader
-                  title="Lệnh sản xuất"
-                  subtitle="Chọn lệnh sản xuất để thực hiện."
-                />
+                <div className={classes.topBar}>
+                  <div className={classes.block}>
+                    <Typography variant="h6" gutterBottom>
+                      Lệnh sản xuất
+                    </Typography>
+                    <Typography variant="body1">
+                      Quản lý các lệnh sản xuất của nhà máy.
+                    </Typography>
+                  </div>
+                  <div>
+                    <Button
+                      variant="outlined"
+                      className={classes.outlinedButtom}
+                      onClick={() => this.props.history.push("/production")}
+                    >
+                      Thêm
+                    </Button>
+                  </div>
+                </div>
+              </Grid>
+              <Grid item xs={12}>
                 {this.props.productions.map((item, key) => (
                   <CardProduction
                     key={key}

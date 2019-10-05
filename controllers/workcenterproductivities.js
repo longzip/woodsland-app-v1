@@ -1,4 +1,11 @@
-const { WorkcenterProductivity } = require("../models/index");
+const {
+  WorkcenterProductivity,
+  Product,
+  Contact,
+  Pallet,
+  Production,
+  Workcenter
+} = require("../models/index");
 const Joi = require("@hapi/joi");
 const { Op } = require("sequelize");
 const moment = require("moment");
@@ -12,7 +19,9 @@ function validate(data) {
     WorkorderId: Joi.number(),
     ProductId: Joi.number(),
     ProductionId: Joi.number(),
-    userId: Joi.number()
+    PalletId: Joi.number(),
+    ContactId: Joi.number(),
+    UserId: Joi.number()
   };
   return Joi.validate(data, schema);
 }
@@ -131,6 +140,13 @@ module.exports = {
     console.log(req.query.name);
     // find multiple entries
     WorkcenterProductivity.findAll({
+      include: [
+        { model: Product },
+        { model: Pallet },
+        { model: Contact },
+        { model: Workcenter },
+        { model: Production }
+      ],
       offset: req.query.offset || 0,
       limit: req.query.limit || 0,
       where: req.query.name

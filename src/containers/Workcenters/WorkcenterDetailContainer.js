@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/styles/withStyles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import CardWorkorder from "../../components/cards/CardWorkorder";
+import CardNextWorkorder from "../../components/cards/CardNextWorkorder";
 import Topbar from "../../components/Topbar";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
@@ -42,6 +42,7 @@ class WorkcenterDetailContainer extends Component {
     super();
     this.state = {
       open: false,
+      openAccept: false,
       textInputValue: "",
       item: {}
     };
@@ -49,6 +50,8 @@ class WorkcenterDetailContainer extends Component {
       this
     );
     this.handleClose = this.handleClose.bind(this);
+    // this.handleAccept = this.handleAccept.bind(this);
+    this.handleClickOpenAccept = this.handleClickOpenAccept.bind(this);
   }
   componentDidMount() {
     this._fetchWorkcenter();
@@ -61,8 +64,14 @@ class WorkcenterDetailContainer extends Component {
     this.setState({ open: true });
   }
 
+  handleClickOpenAccept(item) {
+    console.log("item jfsjdkfjsljfsjfjskdfjksdfjsd");
+    console.log(item);
+    // this.setState(() => ({ item, openAccept: true }));
+  }
+
   handleClose() {
-    this.setState({ open: false });
+    this.setState({ open: false, openAccept: false });
   }
   handleChange = event => {
     const {
@@ -90,9 +99,10 @@ class WorkcenterDetailContainer extends Component {
             >
               <Grid item xs={12}>
                 {workorders.map((item, key) => (
-                  <CardWorkorder
+                  <CardNextWorkorder
                     key={key}
                     workorder={item}
+                    handleAccept={this.handleClickOpenAccept}
                     handleEdit={this.handleClickOpen.bind(this, item)}
                   />
                 ))}
@@ -129,6 +139,29 @@ class WorkcenterDetailContainer extends Component {
                 onClick={this._saveWorkcenterProductivity}
                 color="primary"
               >
+                Ghi nhận
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Accept */}
+          <Dialog
+            open={this.state.openAccept}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">Nhận pallet</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Ghi nhận số liệu đã nhận của công đoạn trước, để thực hiện sản
+                xuất.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Hủy
+              </Button>
+              <Button onClick={this.handleClose} color="primary">
                 Ghi nhận
               </Button>
             </DialogActions>
@@ -188,16 +221,7 @@ const makeMapStateToProps = () => {
         state.selectedWorkcenterReducer.workcenterErrorMessage,
       workorders: getWorkcenterWorkorders(state, props),
       workordersIsLoading: state.workordersReducer.workordersIsLoading,
-      workordersErrorMessage: state.workordersReducer.workordersErrorMessage,
-      //
-      workcenterProductivitiesSuccessMessage:
-        state.workcenterProductivitiesReducer
-          .workcenterProductivitiesSuccessMessage,
-      workcenterProductivitiesIsLoading:
-        state.workcenterProductivitiesReducer.workcenterProductivitiesIsLoading,
-      workcenterProductivitiesErrorMessage:
-        state.workcenterProductivitiesReducer
-          .workcenterProductivitiesErrorMessage
+      workordersErrorMessage: state.workordersReducer.workordersErrorMessage
     };
   };
   return mapStateToProps;
