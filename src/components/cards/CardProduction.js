@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router";
 import withStyles from "@material-ui/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -69,8 +70,25 @@ const styles = theme => ({
 });
 
 class CardItem extends Component {
+  constructor(props) {
+    super(props);
+    this.handleEdit = this.handleEdit.bind(this);
+  }
+  handleEdit() {
+    this.props.history.push(
+      "/production/" + this.props.production.id + "/detail"
+    );
+  }
   render() {
-    const { classes, production } = this.props;
+    const { classes, handleEdit } = this.props;
+    const {
+      name,
+      datePlannedFinished,
+      productDimension,
+      productQty,
+      productUom,
+      Product
+    } = this.props.production;
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -78,10 +96,10 @@ class CardItem extends Component {
             <div className={classes.baseline}>
               <div className={classes.inline}>
                 <Typography style={{ textTransform: "uppercase" }} gutterBottom>
-                  Lệnh sản xuất: {production.name}
+                  Lệnh sản xuất: {name}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  Ngày hoàn thành: {production.datePlannedFinished}
+                  Ngày hoàn thành: {datePlannedFinished}
                 </Typography>
               </div>
               <div className={classes.inline}>
@@ -91,20 +109,20 @@ class CardItem extends Component {
                   variant="h4"
                   gutterBottom
                 >
-                  {production.Product.name}
+                  {Product && Product.name}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  Kích thước: {production.productDimension}
+                  Kích thước: {productDimension}
                 </Typography>
               </div>
               <div className={classes.inline}>
                 <Typography style={{ textTransform: "uppercase" }} gutterBottom>
-                  Số lượng cần sản xuất:{production.productQty}
+                  Số lượng cần sản xuất:{productQty}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  {production.productUom} / {production.factor}
+                  {productUom}
                 </Typography>
-                <ButtonBarProduction handleEdit={this.props.handleEdit} />
+                <ButtonBarProduction handleEdit={this.handleEdit} />
               </div>
             </div>
           </div>
@@ -114,4 +132,4 @@ class CardItem extends Component {
   }
 }
 
-export default withStyles(styles)(CardItem);
+export default withStyles(styles)(withRouter(CardItem));

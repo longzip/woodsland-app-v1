@@ -1,12 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Routes from "./routes";
+import { Typography, Link } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./theme";
+import Routes from "./routes";
 
-function Copyright() {
+const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
@@ -17,7 +16,7 @@ function Copyright() {
       {"."}
     </Typography>
   );
-}
+};
 
 export class App extends React.Component {
   render() {

@@ -5,7 +5,7 @@ export const apiClient = axios.create({
    * Import the config from the App/Config/index.js file
    * http://localhost:5000
    */
-  baseURL: "http://localhost:5000/api/v1/",
+  baseURL: "http://zipadmin.ddns.net:5000/api/v1/",
   method: "get",
   headers: {
     Accept: "application/json",

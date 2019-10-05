@@ -4,11 +4,19 @@ import SelectedProductionActions from "../Stores/SelectedProduction/Actions";
 import { productionsService } from "../Services/ProductionsService";
 
 export function* fetchProductions() {
-  yield put(ProductionsActions.fetchProductionsLoading());
-  const productions = yield call(productionsService.fetchProductions);
-  if (productions) {
-    yield put(ProductionsActions.fetchProductionsSuccess(productions));
-  } else {
+  try {
+    yield put(ProductionsActions.fetchProductionsLoading());
+    const productions = yield call(productionsService.fetchProductions);
+    if (productions) {
+      yield put(ProductionsActions.fetchProductionsSuccess(productions));
+    } else {
+      yield put(
+        ProductionsActions.fetchProductionsFailure(
+          "Có lỗi xảy ra khi tải dữ liệu Lệnh sản xuất (productions)."
+        )
+      );
+    }
+  } catch {
     yield put(
       ProductionsActions.fetchProductionsFailure(
         "Có lỗi xảy ra khi tải dữ liệu Lệnh sản xuất (productions)."
