@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import withStyles from "@material-ui/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -7,7 +6,7 @@ import ButtonBarWorkcenterProductivity from "../buttons/ButtonBarWorkcenterProdu
 
 class CardWorkorderProductivity extends Component {
   render() {
-    const { classes, edit = true } = this.props;
+    const { classes, edit = true, handleAccept, handleEdit } = this.props;
     const {
       Product,
       Contact,
@@ -26,14 +25,16 @@ class CardWorkorderProductivity extends Component {
                 <Typography style={{ textTransform: "uppercase" }} gutterBottom>
                   Dự án: {Contact && Contact.name}
                 </Typography>
-                <Typography gutterBottom>Mã SP: {Product.code}</Typography>
+                <Typography gutterBottom>
+                  Mã SP: {Product && Product.code}
+                </Typography>
               </div>
               <div className={classes.inline}>
                 <Typography style={{ textTransform: "uppercase" }} gutterBottom>
-                  Chi tiết: {Product.name}
+                  Chi tiết: {Product && Product.name}
                 </Typography>
                 <Typography gutterBottom>
-                  Quy cách: {Production.productDimension}
+                  Quy cách: {Production && Production.productDimension}
                 </Typography>
               </div>
               <div className={classes.inline}>
@@ -51,8 +52,8 @@ class CardWorkorderProductivity extends Component {
                 {edit && (
                   <ButtonBarWorkcenterProductivity
                     accepted={accepted}
-                    handleEdit={this.props.handleEdit}
-                    handleAccept={this.props.handleAccept}
+                    handleEdit={handleEdit}
+                    handleAccept={handleAccept}
                   />
                 )}
               </div>
@@ -133,18 +134,5 @@ const styles = theme => ({
     marginRight: theme.spacing(2)
   }
 });
-
-// const makeMapStateToProps = () => {
-//   const getWorkorderProductivities = makeGetWorkorderProductivities();
-//   const getNextWorkorderProductivities = makeGetNextWorkorderProductivities();
-
-//   const mapStateToProps = (state, props) => {
-//     return {
-//       workorderProductivities: getWorkorderProductivities(state, props),
-//       nextworkorderProductivities: getNextWorkorderProductivities(state, props)
-//     };
-//   };
-//   return mapStateToProps;
-// };
 
 export default withStyles(styles)(CardWorkorderProductivity);

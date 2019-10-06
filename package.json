@@ -45,7 +45,7 @@
     "xlsx": "^0.15.1"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "dev": "react-scripts start",
     "dev-s": "cross-env NODE_ENV=development nodemon server.js",
     "build": "react-scripts build",

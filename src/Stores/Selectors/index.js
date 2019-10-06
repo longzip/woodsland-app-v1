@@ -26,8 +26,6 @@ const makeGetProductionWorkorders = () => {
 };
 
 const getWorkorderFilter = (state, props) => props.workorder.id;
-const getNextWorkorderFilter = (state, props) =>
-  props.workorder.nextWorkOrderId;
 
 const getWorkcenterProductivities = state =>
   state.workcenterProductivitiesReducer.workcenterProductivities;
@@ -43,6 +41,8 @@ const makeGetWorkorderProductivities = () => {
   );
 };
 
+const getNextWorkorderFilter = (state, props) =>
+  props.workorder.nextWorkOrderId;
 const makeGetNextWorkorderProductivities = () => {
   return createSelector(
     [getNextWorkorderFilter, getWorkcenterProductivities],

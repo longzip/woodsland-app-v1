@@ -5,15 +5,15 @@ export default class WorkorderList extends Component {
   render() {
     const { workorders, handleEdit } = this.props;
     return (
-      <div>
+      <React.Fragment>
         {workorders.map((item, key) => (
           <CardWorkorder
             key={key}
             workorder={item}
-            handleEdit={handleEdit.bind(this, item)}
+            handleEdit={handleEdit(item)}
           />
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 }

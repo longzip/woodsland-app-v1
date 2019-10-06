@@ -27,7 +27,7 @@ class ButtonBarWorkcenterProductivity extends Component {
           </Button>
         )}
         <Button
-          disabled={accepted}
+          disabled={!accepted}
           variant="contained"
           color="primary"
           className={classes.secondary}

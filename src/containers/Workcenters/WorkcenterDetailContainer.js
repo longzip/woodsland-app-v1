@@ -1,41 +1,28 @@
 import React, { Component } from "react";
-import withStyles from "@material-ui/styles/withStyles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import CardNextWorkorder from "../../components/cards/CardNextWorkorder";
-import Topbar from "../../components/Topbar";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import withStyles from "@material-ui/styles/withStyles";
+import {
+  CssBaseline,
+  Grid,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+  CircularProgress
+} from "@material-ui/core";
+import WorkordersList from "../Workorders/WorkordersList";
+import Topbar from "../../components/Topbar";
 import SelectedWorkcenterActions from "../../Stores/SelectedWorkcenter/Actions";
 import WorkcenterProductivitiesActions from "../../Stores/WorkcenterProductivities/Actions";
 import WorkordersActions from "../../Stores/Workorders/Actions";
 import { makeGetWorkcenterWorkorders } from "../../Stores/Selectors";
 import BackWorkcenter from "../../components/common/BackWorkcenter";
-const backgroundShape = require("../../images/shape.svg");
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.grey["A500"],
-    overflow: "hidden",
-    background: `url(${backgroundShape}) no-repeat`,
-    backgroundSize: "cover",
-    backgroundPosition: "0 400px",
-    marginTop: 20,
-    padding: 20,
-    paddingBottom: 200
-  },
-  grid: {
-    width: 1000
-  }
-});
+import styles from "./WorkcenterDetailContainerStyle";
 
 class WorkcenterDetailContainer extends Component {
   constructor() {
@@ -49,9 +36,10 @@ class WorkcenterDetailContainer extends Component {
     this._saveWorkcenterProductivity = this._saveWorkcenterProductivity.bind(
       this
     );
+    this._acceptWorkcenterProductivity = this._acceptWorkcenterProductivity.bind(
+      this
+    );
     this.handleClose = this.handleClose.bind(this);
-    // this.handleAccept = this.handleAccept.bind(this);
-    this.handleClickOpenAccept = this.handleClickOpenAccept.bind(this);
   }
   componentDidMount() {
     this._fetchWorkcenter();
@@ -59,16 +47,15 @@ class WorkcenterDetailContainer extends Component {
     this.props.fetchWorkcenterProductivities();
   }
 
-  handleClickOpen(item) {
+  handleClickOpen = item => {
     this.setState(() => ({ item }));
     this.setState({ open: true });
-  }
+  };
 
-  handleClickOpenAccept(item) {
-    console.log("item jfsjdkfjsljfsjfjskdfjksdfjsd");
-    console.log(item);
-    // this.setState(() => ({ item, openAccept: true }));
-  }
+  handleClickOpenAccept = item => {
+    this.setState(() => ({ item }));
+    this.setState({ openAccept: true });
+  };
 
   handleClose() {
     this.setState({ open: false, openAccept: false });
@@ -81,92 +68,115 @@ class WorkcenterDetailContainer extends Component {
   };
 
   render() {
-    const { classes, workorders } = this.props;
+    const {
+      classes,
+      workorders,
+      workcenterIsLoading,
+      workcenterErrorMessage,
+      workordersIsLoading,
+      workordersErrorMessage
+    } = this.props;
     const currentPath = this.props.location.pathname;
 
     return (
       <React.Fragment>
-        <CssBaseline />
-        <Topbar currentPath={currentPath} />
-        <BackWorkcenter name={this.props.workcenter.name} />
-        <div className={classes.root}>
-          <Grid container justify="center">
-            <Grid
-              alignItems="center"
-              justify="center"
-              container
-              className={classes.grid}
-            >
-              <Grid item xs={12}>
-                {workorders.map((item, key) => (
-                  <CardNextWorkorder
-                    key={key}
-                    workorder={item}
-                    handleAccept={this.handleClickOpenAccept}
-                    handleEdit={this.handleClickOpen.bind(this, item)}
-                  />
-                ))}
-              </Grid>
-            </Grid>
+        {workcenterIsLoading && workordersIsLoading ? (
+          <Grid container direction="row" justify="center" alignItems="center">
+            <CircularProgress disableShrink />
           </Grid>
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Nhập số liệu</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Bạn đã sản xuất được bao nhiêu? Ghi nhận số liệu tại ô trống
-                dưới đây.
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Số lượng"
-                type="number"
-                fullWidth
-                value={this.state.textInputValue}
-                onChange={this.handleChange}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Hủy
-              </Button>
-              <Button
-                onClick={this._saveWorkcenterProductivity}
-                color="primary"
+        ) : workcenterErrorMessage && workordersErrorMessage ? (
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Typography variant="body1">
+              {workcenterErrorMessage && workcenterErrorMessage}
+              {workordersErrorMessage && workordersErrorMessage}
+            </Typography>
+            {<Button onClick={() => this._fetchWorkorders()}>Tải lại</Button>}
+          </Grid>
+        ) : (
+          <div>
+            <CssBaseline />
+            <Topbar currentPath={currentPath} />
+            <BackWorkcenter name={this.props.workcenter.name} />
+            <div className={classes.root}>
+              <Grid container justify="center">
+                <Grid
+                  alignItems="center"
+                  justify="center"
+                  container
+                  className={classes.grid}
+                >
+                  <Grid item xs={12}>
+                    <WorkordersList
+                      workorders={workorders}
+                      handleEdit={this.handleClickOpen}
+                      handleAccept={this.handleClickOpenAccept}
+                      handleSave={this.handleClickOpen}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
               >
-                Ghi nhận
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          {/* Accept */}
-          <Dialog
-            open={this.state.openAccept}
-            onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Nhận pallet</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Ghi nhận số liệu đã nhận của công đoạn trước, để thực hiện sản
-                xuất.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Hủy
-              </Button>
-              <Button onClick={this.handleClose} color="primary">
-                Ghi nhận
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+                <DialogTitle id="form-dialog-title">Nhập số liệu</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Bạn đã sản xuất được bao nhiêu? Ghi nhận số liệu tại ô trống
+                    dưới đây.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Số lượng"
+                    type="number"
+                    fullWidth
+                    value={this.state.textInputValue}
+                    onChange={this.handleChange}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={this._saveWorkcenterProductivity}
+                    color="primary"
+                  >
+                    Ghi nhận
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              {/* Accept */}
+              <Dialog
+                open={this.state.openAccept}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <DialogTitle id="form-dialog-title">Nhận pallet</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Ghi nhận số liệu đã nhận của công đoạn trước, để thực hiện
+                    sản xuất.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={this._acceptWorkcenterProductivity}
+                    color="primary"
+                  >
+                    Ghi nhận
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          </div>
+        )}
       </React.Fragment>
     );
   }
@@ -180,6 +190,15 @@ class WorkcenterDetailContainer extends Component {
 
   _fetchWorkorders() {
     this.props.fetchWorkorders();
+  }
+  _acceptWorkcenterProductivity() {
+    const { id } = this.state.item;
+    const workcenterProductivity = {
+      id,
+      accepted: true
+    };
+    this.props.saveWorkcenterProductivity(workcenterProductivity);
+    this.setState({ openAccept: false });
   }
   _saveWorkcenterProductivity() {
     const {
@@ -197,7 +216,6 @@ class WorkcenterDetailContainer extends Component {
       qtyProduced: this.state.textInputValue,
       productUom
     };
-    // console.log(workcenterProductivity);
     this.props.saveWorkcenterProductivity(workcenterProductivity);
     this.setState({ open: false });
     this.setState(() => ({ textInputValue: "" }));

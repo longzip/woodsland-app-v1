@@ -1,22 +1,61 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import withStyles from "@material-ui/styles/withStyles";
 import CardWorkorderProductivity from "../../components/cards/CardWorkorderProductivity";
+import { makeGetNextWorkorderProductivities } from "../../Stores/Selectors";
+import WorkcenterProductivitiesActions from "../../Stores/WorkcenterProductivities/Actions";
+import styles from "./WorkcenterDetailContainerStyle";
 
-export default class WorkcenterProductivitiesList extends Component {
+export class WorkcenterProductivitiesList extends Component {
+  constructor(props) {
+    super(props);
+  }
+  handleAccept(item) {
+    console.log("Accept Item:");
+    console.log(item);
+  }
+
+  handleSave(item) {
+    console.log("Save Item");
+    console.log(item);
+  }
   render() {
-    const { workcenterProductivities, handleEdit, handleAccept } = this.props;
-    console.log(workcenterProductivities);
+    const { nextWorkorderProductivities } = this.props;
     return (
-      <div>
-        {workcenterProductivities.map((item, key) => (
+      <React.Fragment>
+        {nextWorkorderProductivities.map((item, key) => (
           <CardWorkorderProductivity
             key={key}
             workcenterProductivity={item}
-            handleAccept={handleAccept(item)}
-            handleEdit={handleEdit(item)}
+            handleAccept={() => this.props.handleAccept(item)}
+            handleEdit={() => this.props.handleEdit(item)}
           />
         ))}
-      </div>
+      </React.Fragment>
     );
   }
 }
+const makeMapStateToProps = () => {
+  const getNextWorkorderProductivities = makeGetNextWorkorderProductivities();
+  const mapStateToProps = (state, props) => {
+    return {
+      workcenterProductivities: getNextWorkorderProductivities(state, props)
+    };
+  };
+  return mapStateToProps;
+};
+const mapDispatchToProps = dispatch => ({
+  saveWorkcenterProductivity: workcenterProductivityBeingAddedOrEdited =>
+    dispatch(
+      WorkcenterProductivitiesActions.saveWorkcenterProductivity(
+        workcenterProductivityBeingAddedOrEdited
+      )
+    )
+});
+
+export default withStyles(styles)(
+  connect(
+    makeMapStateToProps,
+    mapDispatchToProps
+  )(WorkcenterProductivitiesList)
+);
