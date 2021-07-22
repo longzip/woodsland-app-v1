@@ -42,7 +42,7 @@
     "reselect": "^4.0.0",
     "sequelize": "^5.19.2",
     "tedious": "^6.4.0",
-    "xlsx": "^0.15.1"
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "node server.js",
